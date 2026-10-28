@@ -1,0 +1,19 @@
+{
+  "name": "api-revest-e1",
+  "version": "1.0.0",
+  "description": "Projeto da disciplina Codificação Backend 105116",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ArthurMK1/api-revest-e1.git"
+  },
+  "keywords": [],
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/ArthurMK1/api-revest-e1/issues"
+  },
+  "homepage": "https://github.com/ArthurMK1/api-revest-e1#readme"
+}
