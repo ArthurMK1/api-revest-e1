@@ -54,13 +54,7 @@ app.get('/roupas', (req, res) => {
     res.status(200).json(roupas);
 });
 
-app.get('/acessorios', (req, res) => {
-    res.status(200).send('Rota de acessorios encontrada ');
-});
 
-app.get('/calcados', (req, res) => {
-    res.status(200).send('Rota de calçados encontrada ');
-});
 
 
 export default app
