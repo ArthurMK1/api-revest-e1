@@ -46,15 +46,96 @@ const roupas = [
     }
 ]
 
+//ROTA INICIAL
 app.get('/', (req, res) => {
 res.type('html').send('<h1>REVEST</h1>');
 });
 
+//GET - LISTAR TODAS AS ROUPAS
 app.get('/roupas', (req, res) => {
     res.status(200).json(roupas);
 });
 
 
+//CONSULTAR ROUPA PELO ID
+app.get("/roupas/:id", (req, res) => {
+    const id = Number(req.params.id);
+    
+    const roupa = roupas.find(roupas => roupas.id === id)
+
+    if(!roupa) {
+        return res.status(404).json({ mensagem: "Roupa não encontrada"})
+    }
+    res.json(roupa);
+})
+
+
+
+// POST - CADASTRAR UMA ROUPA
+app.post("/roupas", (req, res) =>{
+    const novaRoupa = {
+        id: roupas.length + 1,
+        nome: req.body.nome,
+        categoria: req.body.categoria,
+        cor: req.body.cor,
+        tamanho: req.body.tamanho,
+        preco: req.body.preco
+    }
+    roupas.push(novaRoupa);
+    res.status(201).json(novaRoupa);
+});
+
+// PUT - ATUALIZAR TODOS OS DADOS DE UMA ROUPA
+app.put("/roupas/:id", (req, res) => {
+    const id = Number(req.params.id);
+
+    const indice = roupas.findIndex(roupa => roupa.id === id);
+
+    if (indice === -1) {
+        return res.status(404).json({ mensagem: "Roupa não encontrada" });
+    }
+
+    roupas[indice] = {
+        id: id,
+        nome: req.body.nome,
+        categoria: req.body.categoria,
+        cor: req.body.cor,
+        tamanho: req.body.tamanho,
+        preco: req.body.preco
+    };
+
+    res.json(roupas[indice]);
+});
+
+// PATCH - ATUALIZAR ALGUNS DADOS DE UMA ROUPA
+app.patch("/roupas/:id", (req, res) => {
+    const id = Number(req.params.id);
+
+    const roupa = roupas.find(roupa => roupa.id === id);
+
+    if (!roupa) {
+        return res.status(404).json({ mensagem: "Roupa não encontrada" });
+    }
+
+    Object.assign(roupa, req.body);
+
+    res.json(roupa);
+});
+
+// DELETE - DELETAR UMA ROUPA
+app.delete("/roupas/:id", (req, res) => {
+    const id = Number(req.params.id);
+
+    const indice = roupas.findIndex(roupa => roupa.id === id);
+
+    if (indice === -1) {
+        return res.status(404).json({ mensagem: "Roupa não encontrada" });
+    }
+
+    roupas.splice(indice, 1);
+
+    res.status(204).end();
+});
 
 
 export default app
