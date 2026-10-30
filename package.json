@@ -4,7 +4,8 @@
   "description": "Projeto da disciplina Codificação Backend 105116",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/ArthurMK1/api-revest-e1/issues"
   },
-  "homepage": "https://github.com/ArthurMK1/api-revest-e1#readme"
+  "homepage": "https://github.com/ArthurMK1/api-revest-e1#readme",
+  "dependencies": {
+    "express": "^5.3.0",
+    "nodemon": "^3.1.14"
+  }
 }
