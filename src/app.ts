@@ -1,10 +1,19 @@
-
+import 'dotenv/config';
 import express from "express";
+
+export interface Roupa {
+    id: number;
+    nome: string;
+    categoria: string;
+    cor: string;
+    tamanho: string;
+    preco: number;
+}
 
 const app = express();
 app.use(express.json());
 
-const roupas = [
+const roupas: Roupa[] = [
     {
         id: 1,
         nome: "Camiseta básica",
@@ -48,24 +57,23 @@ const roupas = [
 ];
 
 // BUSCAR ROUPA PELO ID
-function buscaRoupa(id) {
+function buscaRoupa(id: string | number): number {
     return roupas.findIndex(roupa => {
         return roupa.id === Number(id);
     });
 }
 
-// ROTA INICIAL
-app.get("/", (req, res) => {
+//REQUISIÇÕES
+app.get("/", (req: Request, res: Response) => {
     res.type("html").send("<h1>REVEST</h1>");
 });
 
-// GET - LISTAR TODAS AS ROUPAS
-app.get("/roupas", (req, res) => {
+app.get("/roupas", (req: Request, res: Response) => {
     res.status(200).json(roupas);
 });
 
 // GET - BUSCAR ROUPA PELO ID
-app.get("/roupas/:id", (req, res) => {
+app.get("/roupas/:id", (req: Request, res: Response) => {
     const id = Number(req.params.id);
 
     const roupa = roupas.find(roupa => roupa.id === id);
@@ -79,21 +87,25 @@ app.get("/roupas/:id", (req, res) => {
     res.json(roupa);
 });
 
-// POST - CADASTRAR UMA ROUPA
-app.post("/roupas", (req, res) => {
+//REQUISIÇÃO POST (CADASTRAR NOVA ROUPA)
+app.post("/roupas", (req: Request, res: Response) => {
+    const { id, nome, categoria, cor, tamanho, preco} = req.body;
 
-    const novaRoupa = {
-        id: roupas.length + 1,
-        nome: req.body.nome,
-        categoria: req.body.categoria,
-        cor: req.body.cor,
-        tamanho: req.body.tamanho,
-        preco: req.body.preco
+    const novaRoupa: Roupa = {
+        id: Number(id),
+        nome,
+        categoria,
+        cor,
+        tamanho,
+        preco: Number(preco),
     };
 
     roupas.push(novaRoupa);
 
-    res.status(201).json(novaRoupa);
+    res.status(201).json({
+        mensagem: "Roupa cadastrada com sucesso!",
+        roupa: novaRoupa
+    })
 });
 
 // PUT - ATUALIZAR TODOS OS DADOS
