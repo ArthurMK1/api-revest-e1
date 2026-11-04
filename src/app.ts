@@ -1,5 +1,5 @@
-import 'dotenv/config';
 import express from "express";
+import type { Request, Response } from "express";
 
 export interface Roupa {
     id: number;
@@ -11,6 +11,7 @@ export interface Roupa {
 }
 
 const app = express();
+
 app.use(express.json());
 
 const roupas: Roupa[] = [
@@ -89,6 +90,7 @@ app.get("/roupas/:id", (req: Request, res: Response) => {
 
 //REQUISIÇÃO POST (CADASTRAR NOVA ROUPA)
 app.post("/roupas", (req: Request, res: Response) => {
+
     const { id, nome, categoria, cor, tamanho, preco} = req.body;
 
     const novaRoupa: Roupa = {
@@ -97,10 +99,10 @@ app.post("/roupas", (req: Request, res: Response) => {
         categoria,
         cor,
         tamanho,
-        preco: Number(preco),
+        preco: Number(preco)
     };
 
-    roupas.push(novaRoupa);
+    roupas.push(novaRoupa)
 
     res.status(201).json({
         mensagem: "Roupa cadastrada com sucesso!",
@@ -109,27 +111,30 @@ app.post("/roupas", (req: Request, res: Response) => {
 });
 
 // PUT - ATUALIZAR TODOS OS DADOS
-app.put("/roupas/:id", (req, res) => {
+app.put("/roupas/:id", (req: Request, res: Response) => {
 
-    const id = Number(req.params.id);
-    const index = buscaRoupa(id);
+    const index = buscaRoupa(String(req.params.id));
 
     if (index === -1) {
-        return res.status(404).json({
-            mensagem: "Roupa não encontrada"
-        });
+        res.status(404).json({ mensagem: "Roupa não encontrada"});
+        return;
     }
 
+    const { id, nome, categoria, cor, tamanho, preco} = req.body;
+
     roupas[index] = {
-        id: id,
-        nome: req.body.nome,
-        categoria: req.body.categoria,
-        cor: req.body.cor,
-        tamanho: req.body.tamanho,
-        preco: req.body.preco
+        ...roupas[index]!,
+        nome,
+        categoria,
+        cor,
+        tamanho,
+        preco: Number(preco)
     };
 
-    res.json(roupas[index]);
+    res.status(202).json({
+        mensagem: "Livro atualizado com sucesso!",
+        roupa: roupas[index]
+    });
 });
 
 // PATCH - ATUALIZAR ALGUNS DADOS
@@ -151,21 +156,23 @@ app.patch("/roupas/:id", (req, res) => {
 });
 
 // DELETE - DELETAR UMA ROUPA
-app.delete("/roupas/:id", (req, res) => {
-
+app.delete("/roupas/:id", (req: Request, res: Response) => {
+    const index = buscaRoupa(String(req.params.id)) 
+    
     const id = Number(req.params.id);
 
-    const indice = roupas.findIndex(roupa => roupa.id === id);
-
-    if (indice === -1) {
+    if (index === -1) {
         return res.status(404).json({
             mensagem: "Roupa não encontrada"
         });
     }
 
-    roupas.splice(indice, 1);
+    roupas.splice(index, 1);
 
-    res.status(204).end();
+    res.status(200).json({
+        mensagem: "Roupa removida com sucesso!"
+    });
 });
+
 
 export default app;
