@@ -170,7 +170,7 @@ app.delete("/roupas/:id", (req: Request, res: Response) => {
     roupas.splice(index, 1);
 
     res.status(200).json({
-        mensagem: "Roupa removida com sucesso!"
+        mensagem: "Roupa retirada com sucesso!"
     });
 });
 
