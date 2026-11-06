@@ -2,7 +2,7 @@ import express from "express";
 import type { Request, Response } from "express";
 
 export interface Roupa {
-    id: number;
+    id: numbe
     nome: string;
     categoria: string;
     cor: string;
@@ -138,26 +138,36 @@ app.put("/roupas/:id", (req: Request, res: Response) => {
 });
 
 // PATCH - ATUALIZAR ALGUNS DADOS
-app.patch("/roupas/:id", (req, res) => {
+app.patch("/roupas/:id", (req: Request, res: Response) => {
+    const index = buscaRoupa(String(req.params.id))
 
-    const id = Number(req.params.id);
-
-    const roupa = roupas.find(roupa => roupa.id === id);
-
-    if (!roupa) {
+    if (index === -1) {
         return res.status(404).json({
-            mensagem: "Roupa não encontrada"
+            mensagem: "Roupa não encontrada!"
         });
     }
 
-    Object.assign(roupa, req.body);
+    const { id, nome, categoria, cor, tamanho, preco} = req.body;
 
-    res.json(roupa);
+    roupas[index] = {
+        ...roupas[index]!,
+        ...(nome !== undefined && {nome}),
+        ...(categoria !== undefined && {categoria}),
+        ...(cor !== undefined && {cor}),
+        ...(tamanho !== undefined && {tamanho}),
+        ...(preco !== undefined && {preco: Number(preco)})
+    };
+
+    res.status(200).json({
+        mensagem: "Livro atualizado com sucesso!",
+        roupa: roupas[index]
+    });
+
 });
 
 // DELETE - DELETAR UMA ROUPA
 app.delete("/roupas/:id", (req: Request, res: Response) => {
-    const index = buscaRoupa(String(req.params.id)) 
+    const index = buscaRoupa(String(req.params.id))
     
     const id = Number(req.params.id);
 
