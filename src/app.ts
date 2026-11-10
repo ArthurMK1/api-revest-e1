@@ -2,7 +2,7 @@ import express from "express";
 import type { Request, Response } from "express";
 
 export interface Roupa {
-    id: numbe
+    id: number;
     nome: string;
     categoria: string;
     cor: string;
