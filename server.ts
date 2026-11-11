@@ -31,3 +31,7 @@ async function InitializeServer(){
 }
 
 InitializeServer();
+
+
+//PORT=3000
+//DB_CONNECTION_STRING=mongodb+srv://arthurluismk_db_user:DgJHTKjvvmIoMtTz@cluster0.qmvukc4.mongodb.net/

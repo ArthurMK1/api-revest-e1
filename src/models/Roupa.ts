@@ -14,23 +14,23 @@ import { title } from "node:process";
 //DEFINIÇÃO DO SCHEMA MAPEANDO OS CAMPOS
 
 const roupaSchema =  new Schema (
-{
-    nome:{ type: String, require: true },
-    categoria:{ type: String, require: true },
-    cor:{ type: String, require: true },
-    tamanho:{ type: String, require: true },
-    preco:{ type: Number, require: true }
-},
-{versionKey: false}
+    {
+        nome:{ type: String, required: true },
+        categoria:{ type: String, required: true },
+        cor:{ type: String, required: true },
+        tamanho:{ type: String, required: true },
+        preco:{ type: Number, required: true }
+    },
+    {versionKey: false}
 
-)
+);
 
 // EXTRAÇÃO AUTOMATICA DO TIPO (SUBTITUINDO A CRIAÇÃO MANUAL DA INTERFACE)
 
-export type Interfaceroupa = InferSchemaType<typeof roupaSchema>;
+export type InterfaceRoupa = InferSchemaType<typeof roupaSchema>;
 
 // CRIAÇÃO DO MODEL (MONGOOSE)
-const Roupa = mongoose.model("Roupas", roupaSchema);
+const Roupa = mongoose.model("Roupa", roupaSchema);
 
-// DISPONIBILIZA O MÓDULO PARA SER IMPORTADO EM OUTROS ARQUIVOS 
+// DISPONIBILIZA O MÓDULO PARA SER IMPORTADO EM OUTROS ARQUIVOS
 export default Roupa;
