@@ -100,7 +100,7 @@ app.get("/roupas/:id", (req: Request, res: Response) => {
 app.post("/roupas", async (req: Request<{},{},InterfaceRoupa>, res: Response) => {
     
     try{
-    const { id, nome, categoria, cor, tamanho, preco} = req.body;
+    const { nome, categoria, cor, tamanho, preco} = req.body;
 
     const novaRoupa = await Roupa.create({
         nome,
@@ -120,30 +120,32 @@ app.post("/roupas", async (req: Request<{},{},InterfaceRoupa>, res: Response) =>
 });
 
 // PUT - ATUALIZAR TODOS OS DADOS
-app.put("/roupas/:id", (req: Request, res: Response) => {
+app.put("/roupas/:id", async (req: Request<{id: string}, {}, InterfaceRoupa>, res: Response) => {
 
-    const index = buscaRoupa(String(req.params.id));
+    try{
+        const {id} = req.params;
 
-    if (index === -1) {
-        res.status(404).json({ mensagem: "Roupa não encontrada"});
-        return;
+        const { nome, categoria, cor, tamanho, preco } = req.body;
+
+        const roupaAtualizada = await Roupa.findByIdAndUpdate(
+            id,
+            {
+                nome,
+                categoria,
+                cor,
+                tamanho,
+                preco: Number(preco)
+            },
+            {new: true}
+        );
+
+        res.status(200).json({
+            mensagem: "Livro atualizado com sucesso!",
+            roupa: roupaAtualizada
+        });
+    }catch (error){
+        res.status(500).json({ mensagem: "Erro ao atualizar roupa." })
     }
-
-    const { id, nome, categoria, cor, tamanho, preco} = req.body;
-
-    roupas[index] = {
-        ...roupas[index]!,
-        nome,
-        categoria,
-        cor,
-        tamanho,
-        preco: Number(preco)
-    };
-
-    res.status(202).json({
-        mensagem: "Livro atualizado com sucesso!",
-        roupa: roupas[index]
-    });
 });
 
 // PATCH - ATUALIZAR ALGUNS DADOS
