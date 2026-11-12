@@ -1,6 +1,6 @@
 import express from "express";
 import type { Request, Response } from "express";
-import Roupa from "./models/Roupa.js";
+import Roupa, { type InterfaceRoupa } from "./models/Roupa.js";
 
 // export interface Roupa {
 //     id: number;
@@ -97,25 +97,26 @@ app.get("/roupas/:id", (req: Request, res: Response) => {
 });
 
 //REQUISIÇÃO POST (CADASTRAR NOVA ROUPA)
-app.post("/roupas", (req: Request, res: Response) => {
-
+app.post("/roupas", async (req: Request<{},{},InterfaceRoupa>, res: Response) => {
+    
+    try{
     const { id, nome, categoria, cor, tamanho, preco} = req.body;
 
-    const novaRoupa: Roupa = {
-        id: Number(id),
+    const novaRoupa = await Roupa.create({
         nome,
         categoria,
         cor,
         tamanho,
         preco: Number(preco)
-    };
-
-    roupas.push(novaRoupa)
+    });
 
     res.status(201).json({
         mensagem: "Roupa cadastrada com sucesso!",
         roupa: novaRoupa
-    })
+    });
+    }catch (error){
+        res.status(500).json({mensagem: "Erro ao cadastrar livro."})
+    }
 });
 
 // PUT - ATUALIZAR TODOS OS DADOS
