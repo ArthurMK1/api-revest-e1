@@ -165,28 +165,30 @@ app.patch("/roupas/:id", async (req: Request<{id: string}, {}, InterfaceRoupa>, 
             });return;
         }
     }catch(error){
-            res.status(500).json({mensagem: "Erro ao atualizar parcialmente a Roupa!"});
-        }
-    });
-
-// DELETE - DELETAR UMA ROUPA
-app.delete("/roupas/:id", (req: Request, res: Response) => {
-    const index = buscaRoupa(String(req.params.id))
-    
-    const id = Number(req.params.id);
-
-    if (index === -1) {
-        return res.status(404).json({
-            mensagem: "Roupa não encontrada"
-        });
+        res.status(500).json({mensagem: "Erro ao atualizar parcialmente a Roupa!"});
     }
-
-    roupas.splice(index, 1);
-
-    res.status(200).json({
-        mensagem: "Roupa retirada com sucesso!"
-    });
 });
 
+// DELETE - DELETAR UMA ROUPA
+app.delete("/roupas/:id", async(req: Request<{id: string}>, res: Response) => {
+    try{
+        const {id} = req.params;
+        
+        const roupaDeletada = await Roupa.findByIdAndDelete(id);
+        
+        if (!roupaDeletada){
+            res.status(404).json({
+                mensagem: "Roupa não encontrada!"
+            });return;
+        }
+
+        res.status(200).json({
+            mensagem: "Roupa removida com sucesso!"
+        });
+    }catch(error){
+        res.status(500).json({mensagem: "Erro ao atualizar remover Roupa!"});
+        
+    }
+});
 
 export default app;

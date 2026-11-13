@@ -33,6 +33,4 @@ async function InitializeServer(){
 InitializeServer();
 
 // PORT=3000
-// DB_CONNECTION_STRING=mongodb+srv://arthurluismk_db_user:DgJHTKjvvmIoMtTZ@cluster0.qmvukc4.mongodb.net/clothes
-
-// mongodb+srv://arthurluismk_db_user:<db_password>@cluster0.ayzyokp.mongodb.net/
+// DB_CONNECTION_STRING=mongodb+srv://arthurluismk_db_user:coSIEHjaDY5b2vAG@cluster0.ayzyokp.mongodb.net/roupas
