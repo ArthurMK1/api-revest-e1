@@ -149,32 +149,25 @@ app.put("/roupas/:id", async (req: Request<{id: string}, {}, InterfaceRoupa>, re
 });
 
 // PATCH - ATUALIZAR ALGUNS DADOS
-app.patch("/roupas/:id", (req: Request, res: Response) => {
-    const index = buscaRoupa(String(req.params.id))
+app.patch("/roupas/:id", async (req: Request<{id: string}, {}, InterfaceRoupa>, res: Response) => {
+    try{
+        const { id } = req.params;
 
-    if (index === -1) {
-        return res.status(404).json({
-            mensagem: "Roupa não encontrada!"
-        });
-    }
+        const roupaAtualizada = await Roupa.findByIdAndUpdate(
+                id,
+                { $set: req.body },
+                { returnDocument: 'after' }
+            )
 
-    const { id, nome, categoria, cor, tamanho, preco} = req.body;
-
-    roupas[index] = {
-        ...roupas[index]!,
-        ...(nome !== undefined && {nome}),
-        ...(categoria !== undefined && {categoria}),
-        ...(cor !== undefined && {cor}),
-        ...(tamanho !== undefined && {tamanho}),
-        ...(preco !== undefined && {preco: Number(preco)})
-    };
-
-    res.status(200).json({
-        mensagem: "Livro atualizado com sucesso!",
-        roupa: roupas[index]
+        if (!roupaAtualizada){
+            res.status(404).json({
+                mensagem: "Roupa não encontrada!"
+            });return;
+        }
+    }catch(error){
+            res.status(500).json({mensagem: "Erro ao atualizar parcialmente a Roupa!"});
+        }
     });
-
-});
 
 // DELETE - DELETAR UMA ROUPA
 app.delete("/roupas/:id", (req: Request, res: Response) => {
