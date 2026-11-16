@@ -70,8 +70,6 @@ app.get("/", (req: Request, res: Response) => {
     res.type("html").send("<h1>REVEST</h1>");
 });
 
-app.get("/roupas", async (req: Request, res: Response) => {
-});
 
 // GET - BUSCAR ROUPA PELO ID
 app.get("/roupas/:id", (req: Request, res: Response) => {
@@ -86,26 +84,6 @@ app.get("/roupas/:id", (req: Request, res: Response) => {
     }
 
     res.json(roupa);
-});
-
-//REQUISIÇÃO POST (CADASTRAR NOVA ROUPA)
-app.post("/roupas", async (req: Request<{},{},InterfaceRoupa>, res: Response) => {
-});
-
-// PUT - ATUALIZAR TODOS OS DADOS
-app.put("/roupas/:id", async (req: Request<{id: string}, {}, InterfaceRoupa>, res: Response) => {
-
-    
-});
-
-// PATCH - ATUALIZAR ALGUNS DADOS
-app.patch("/roupas/:id", async (req: Request<{id: string}, {}, InterfaceRoupa>, res: Response) => {
-
-});
-
-// DELETE - DELETAR UMA ROUPA
-app.delete("/roupas/:id", async(req: Request<{id: string}>, res: Response) => {
-    
 });
 
 export default app;

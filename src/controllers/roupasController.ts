@@ -15,7 +15,7 @@ class RoupaController{
         }
     }
 
-// POST = Cadastrar novas roupas 
+// POST = Cadastrar novas roupas
 
     static async cadastrar (req: Request<{},{},InterfaceRoupa>, res: Response){
         try{
@@ -38,7 +38,7 @@ class RoupaController{
         }
     }
     
-    // PUT = Atualizar dados de roupas 
+    // PUT = Atualizar dados de roupas
     
     static async atualizaTodos (req: Request<{id: string}, {}, InterfaceRoupa>, res: Response){
         try{
@@ -89,7 +89,7 @@ static async atualizaAlguns (req: Request<{id: string}, {}, InterfaceRoupa>, res
     
 }
 
-// DELETE = apaga uma roupa 
+// DELETE = apaga uma roupa
 static async deleta (req: Request<{id: string}>, res: Response){
     try{
         const {id} = req.params;
