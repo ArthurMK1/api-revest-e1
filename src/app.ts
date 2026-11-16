@@ -1,5 +1,6 @@
 import express from "express";
 import type { Request, Response } from "express";
+import mongoose from "mongoose";
 import Roupa, { type InterfaceRoupa } from "./models/Roupa.js";
 
 // export interface Roupa {
@@ -72,51 +73,64 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.get("/roupas", async (req: Request, res: Response) => {
-    try{
-        const listaRoupas = Roupa.find({});
+    try {
+        const listaRoupas = await Roupa.find({});
         res.status(200).json(listaRoupas);
-    }catch (error){
-        res.status(500).json({ mensagem: "Erro ao buscar roupa"})
+    } catch (error) {
+        res.status(500).json({ mensagem: "Erro ao buscar roupa" });
     }
-
 });
 
+
 // GET - BUSCAR ROUPA PELO ID
-app.get("/roupas/:id", (req: Request, res: Response) => {
-    const id = Number(req.params.id);
+app.get("/roupas/:id", async (req: Request, res: Response) => {
+    const id = req.params.id;
 
-    const roupa = roupas.find(roupa => roupa.id === id);
-
-    if (!roupa) {
-        return res.status(404).json({
-            mensagem: "Roupa não encontrada"
+    if (!mongoose.isValidObjectId(id)) {
+        return res.status(400).json({
+            mensagem: "ID inválido"
         });
     }
 
-    res.json(roupa);
+    try {
+        const roupa = await Roupa.findById(id);
+
+        if (!roupa) {
+            return res.status(404).json({
+                mensagem: "Roupa não encontrada"
+            });
+        }
+
+        res.status(200).json(roupa);
+    } catch (error) {
+        res.status(500).json({
+            mensagem: "Erro ao buscar roupa"
+        });
+    }
 });
 
+
 //REQUISIÇÃO POST (CADASTRAR NOVA ROUPA)
-app.post("/roupas", async (req: Request<{},{},InterfaceRoupa>, res: Response) => {
+app.post("/roupas", async (req: Request<{}, {}, InterfaceRoupa>, res: Response) => {
     
     try{
-    const { nome, categoria, cor, tamanho, preco} = req.body;
+        const { nome, categoria, cor, tamanho, preco} = req.body;
 
-    const novaRoupa = await Roupa.create({
-        nome,
-        categoria,
-        cor,
-        tamanho,
-        preco: Number(preco)
-    });
+        const novaRoupa = await Roupa.create({
+            nome,
+            categoria,
+            cor,
+            tamanho,
+            preco: Number(preco)
+        });
 
-    res.status(201).json({
-        mensagem: "Roupa cadastrada com sucesso!",
-        roupa: novaRoupa
-    });
-    }catch (error){
-        res.status(500).json({mensagem: "Erro ao cadastrar livro."})
-    }
+        res.status(201).json({
+            mensagem: "Roupa cadastrada com sucesso!",
+            roupa: novaRoupa
+        });
+        }catch (error){
+            res.status(400).json({mensagem: "Erro ao cadastrar roupa."})
+        }
 });
 
 // PUT - ATUALIZAR TODOS OS DADOS
@@ -130,7 +144,7 @@ app.put("/roupas/:id", async (req: Request<{id: string}, {}, InterfaceRoupa>, re
         const roupaAtualizada = await Roupa.findByIdAndUpdate(
             id,
             {
-                nome,
+                nome,       
                 categoria,
                 cor,
                 tamanho,

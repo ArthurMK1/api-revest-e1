@@ -1,12 +1,12 @@
 import "dotenv/config";
 import app from './src/app.js';
 import connectInDatabase from "./src/config/dbConnect.js";
-import mongoose from "mongoose";
 
 
 const port = process.env.PORT || 3000;
 
-async function InitializeServer(){
+
+async function InitializeServer() {
 
     try{
         const connection = await connectInDatabase();
@@ -32,5 +32,5 @@ async function InitializeServer(){
 
 InitializeServer();
 
-// PORT=3000
-// DB_CONNECTION_STRING=mongodb+srv://arthurluismk_db_user:coSIEHjaDY5b2vAG@cluster0.ayzyokp.mongodb.net/roupas
+//PORT=3000
+//DB_CONNECTION_STRING=mongodb+srv://arthurluismk_db_user:coSIEHjaDY5b2vAG@cluster0.ayzyokp.mongodb.net/Revest

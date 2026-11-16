@@ -1,11 +1,10 @@
 import mongoose, {Schema, Document,type InferSchemaType} from "mongoose";
-import { version } from "node:os";
-import { title } from "node:process";
+
 
 //INTERFACE ALINHADA COM AS PROPRIEDADES USADAS NO APP.TS
 // export interface IRoupa extends Document{
 //     nome: string;
-//     categoria: string;
+//     categoria: string;   
 //     cor: string;
 //     tamanho: string;
 //     preco: number;
