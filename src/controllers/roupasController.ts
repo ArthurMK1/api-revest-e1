@@ -1,5 +1,6 @@
 import type {Request, Response} from "express";
 import Roupa, { type InterfaceRoupa } from "../models/Roupa.js"
+import { error } from "node:console";
 
 
 class RoupaController{
@@ -12,6 +13,56 @@ class RoupaController{
             res.status(200).json(listaRoupas);
         }catch (error){
             res.status(500).json({ mensagem: "Erro ao buscar roupa"})
+        }
+    }
+
+// GET - BUSCAR UMA ROUPA ESPECÍFICA PELO ID - REQ PARAMS
+
+    static async buscarPorId (req: Request<{ id: string }>, res: Response){
+        try{
+            const { id } = req.params;
+            const roupaEncontrada = await Roupa.findById(id);
+
+            if(!roupaEncontrada) {
+                res.status(404).json({mensagem: "Roupa não encontrada."});
+                return;
+            }
+
+            res.status(200).json(roupaEncontrada);
+        }catch (error){
+            res.status(500).json({mensagem: "Erro ao buscar livro por ID."})
+        }
+    }
+
+// GET - FILTRAR ROUPAS POR CRITÉRIOS OPCIONAIS
+
+    static async buscarPorFiltro (req: Request<{},{},InterfaceRoupa>, res: Response ) {
+        try{
+            //Extrair os possíveis filtros enviados após o "?" na URL
+            const { filterNome, filterCategoria, filterCor, filterTamanho, filterPreco } = req.query;
+
+            //Criar um objeto vazio para receber apenas os filtros preenchidos
+            const filtro: Record<string, any> = {};
+
+            if(filterCategoria) {
+                filtro.categoria = String(filterCategoria);
+            }
+
+            if(filterCor){
+                filtro.cor = String(filterCor)
+            }
+
+            if(filterNome){
+                //$regex: busca parcial (ex: "Vestido", encontra "Vestido Aurora Escarlate")
+                filtro.nome = {$regex: String(filterNome), $options: "i"}
+            }
+
+            const roupasFiltradas = await Roupa.find(filtro);
+
+            res.status(200).json(roupasFiltradas)
+
+        }catch (error){
+            res.status(500).json({mensagem: "Erro ao filtrar roupas."})
         }
     }
 
@@ -35,7 +86,7 @@ class RoupaController{
                 roupa: novaRoupa
                 });
         }catch (error){
-                res.status(500).json({mensagem: "Erro ao cadastrar livro."})
+                res.status(500).json({mensagem: "Erro ao cadastrar roupa."})
         }
     }
     
@@ -61,7 +112,7 @@ class RoupaController{
             );
             
             res.status(200).json({
-                mensagem: "Livro atualizado com sucesso!",
+                mensagem: "Roupa atualizada com sucesso!",
                 roupa: roupaAtualizada
             });
         }catch (error){
