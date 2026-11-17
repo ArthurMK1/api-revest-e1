@@ -19,14 +19,15 @@ class RoupaController{
 
     static async cadastrar (req: Request<{},{},InterfaceRoupa>, res: Response){
         try{
-            const { nome, categoria, cor, tamanho, preco} = req.body;
+            const { nome, categoria, cor, tamanho, preco, cover} = req.body;
             
             const novaRoupa = await Roupa.create({
                 nome,
                 categoria,
                 cor,
                 tamanho,
-                preco: Number(preco)
+                preco: Number(preco),
+                cover
             });
             
                 res.status(201).json({
@@ -44,7 +45,7 @@ class RoupaController{
         try{
             const {id} = req.params;
             
-            const { nome, categoria, cor, tamanho, preco } = req.body;
+            const { nome, categoria, cor, tamanho, preco, cover } = req.body;
             
             const roupaAtualizada = await Roupa.findByIdAndUpdate(
                 id,
@@ -53,7 +54,8 @@ class RoupaController{
                     categoria,
                     cor,
                     tamanho,
-                    preco: Number(preco)
+                    preco: Number(preco),
+                    cover
                 },
                 {new: true}
             );

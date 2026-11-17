@@ -19,7 +19,8 @@ const roupaSchema =  new Schema (
         categoria:{ type: String, required: true },
         cor:{ type: String, required: true },
         tamanho:{ type: String, required: true },
-        preco:{ type: Number, required: true }
+        preco:{ type: Number, required: true },
+        cover: { type: String, default: "https://placehold.co/300x450?text=No+Cover"}
     },
     {versionKey: false}
 
