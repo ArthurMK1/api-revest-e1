@@ -15,11 +15,11 @@ import { title } from "node:process";
 
 const roupaSchema =  new Schema (
     {
-        nome:{ type: String, required: true },
-        categoria:{ type: String, required: true },
-        cor:{ type: String, required: true },
-        tamanho:{ type: String, required: true },
-        preco:{ type: Number, required: true },
+        name:{ type: String, required: true },
+        category:{ type: String, required: true },
+        color:{ type: String, required: true },
+        size:{ type: String, required: true },
+        price:{ type: Number, required: true },
         cover: { type: String, default: "https://placehold.co/300x450?text=No+Cover"}
     },
     {versionKey: false}

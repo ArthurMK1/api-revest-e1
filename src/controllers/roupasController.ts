@@ -39,23 +39,32 @@ class RoupaController{
     static async buscarPorFiltro (req: Request<{},{},InterfaceRoupa>, res: Response ) {
         try{
             //Extrair os possíveis filtros enviados após o "?" na URL
-            const { filterNome, filterCategoria, filterCor, filterTamanho, filterPreco } = req.query;
+            const { nome, categoria, cor, tamanho, preco } = req.query;
 
             //Criar um objeto vazio para receber apenas os filtros preenchidos
             const filtro: Record<string, any> = {};
-
-            if(filterCategoria) {
-                filtro.categoria = String(filterCategoria);
-            }
-
-            if(filterCor){
-                filtro.cor = String(filterCor)
-            }
-
-            if(filterNome){
+            
+            if(nome){
                 //$regex: busca parcial (ex: "Vestido", encontra "Vestido Aurora Escarlate")
-                filtro.nome = {$regex: String(filterNome), $options: "i"}
+                filtro.name = {$regex: String(nome), $options: "i"}
             }
+
+            if(categoria) {
+                filtro.category = String(categoria);
+            }
+
+            if(cor){
+                filtro.color = String(cor)
+            }
+            
+            if(tamanho){
+                filtro.size = String(tamanho)
+            }
+
+            if(preco){
+                filtro.price = String(preco)
+            }
+
 
             const roupasFiltradas = await Roupa.find(filtro);
 
@@ -70,14 +79,14 @@ class RoupaController{
 
     static async cadastrar (req: Request<{},{},InterfaceRoupa>, res: Response){
         try{
-            const { nome, categoria, cor, tamanho, preco, cover} = req.body;
+            const { name, category, color, size, price, cover} = req.body;
             
             const novaRoupa = await Roupa.create({
-                nome,
-                categoria,
-                cor,
-                tamanho,
-                preco: Number(preco),
+                name,
+                category,
+                color,
+                size,
+                price: Number(price),
                 cover
             });
             
@@ -96,16 +105,16 @@ class RoupaController{
         try{
             const {id} = req.params;
             
-            const { nome, categoria, cor, tamanho, preco, cover } = req.body;
+            const { name, category, color, size, price, cover } = req.body;
             
             const roupaAtualizada = await Roupa.findByIdAndUpdate(
                 id,
                 {
-                    nome,
-                    categoria,
-                    cor,
-                    tamanho,
-                    preco: Number(preco),
+                    name,
+                    category,
+                    color,
+                    size,
+                    price: Number(price),
                     cover
                 },
                 {new: true}
@@ -126,8 +135,8 @@ class RoupaController{
         }
     }
 
-// PATCH = Atualiza alguns dados 
-static async atualizaAlguns (req: Request<{id: string}, {}, InterfaceRoupa>, res: Response){
+// PATCH = Atualiza alguns dados
+static async atualizaParcial (req: Request<{id: string}, {}, InterfaceRoupa>, res: Response){
     try{
             const { id } = req.params;
     
@@ -156,7 +165,7 @@ static async atualizaAlguns (req: Request<{id: string}, {}, InterfaceRoupa>, res
 }
 
 // DELETE = apaga uma roupa
-static async deleta (req: Request<{id: string}>, res: Response){
+static async deletar (req: Request<{id: string}>, res: Response){
     try{
         const {id} = req.params;
         
