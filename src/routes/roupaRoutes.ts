@@ -10,12 +10,18 @@ const router = Router();
 
 router.get("/roupas/", RoupaController.listar);
 
-router.post("/roupas/:id", RoupaController.cadastrar);
+router.get("/roupas/:id", RoupaController.buscarPorId);
+
+router.get("/roupas/busca", RoupaController.buscarPorFiltro);
+
+router.post("/roupas", RoupaController.cadastrar);
 
 router.put("/roupas/:id", RoupaController.atualizaTodos);
 
 router.patch("/roupas/:id", RoupaController.atualizaAlguns);
 
 router.delete("/roupas/:id", RoupaController.deleta);
+
+
 
 export default router;

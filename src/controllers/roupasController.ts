@@ -9,7 +9,7 @@ class RoupaController{
 
     static async listar (req: Request, res: Response){
         try{
-            const listaRoupas = Roupa.find({});
+            const listaRoupas = await Roupa.find({});
             res.status(200).json(listaRoupas);
         }catch (error){
             res.status(500).json({ mensagem: "Erro ao buscar roupa"})
@@ -110,6 +110,12 @@ class RoupaController{
                 },
                 {new: true}
             );
+            if (!roupaAtualizada) {
+                res.status(404).json({
+                    mensagem: "Roupa não encontrada!"
+                });
+                return;
+}
             
             res.status(200).json({
                 mensagem: "Roupa atualizada com sucesso!",
@@ -129,6 +135,7 @@ static async atualizaAlguns (req: Request<{id: string}, {}, InterfaceRoupa>, res
                     id,
                     { $set: req.body },
                     { returnDocument: 'after' }
+                    
                 )
     
             if (!roupaAtualizada){
@@ -136,6 +143,12 @@ static async atualizaAlguns (req: Request<{id: string}, {}, InterfaceRoupa>, res
                     mensagem: "Roupa não encontrada!"
                 });return;
             }
+
+            res.status(200).json({
+                mensagem: "Roupa atualizada com sucesso!",
+                roupa: roupaAtualizada
+            });
+
     }catch(error){
             res.status(500).json({mensagem: "Erro ao atualizar parcialmente a Roupa!"});
     }

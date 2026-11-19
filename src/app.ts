@@ -11,7 +11,7 @@ app.use(express.json());
 // app.use("json spaces", 2);
 
 //ROTA BASE - GET GERAL
-app.get("/roupas", (req: Request, res: Response) =>{
+app.get("/", (req: Request, res: Response) =>{
     res.status(200).send("REVEST");
 });
 
