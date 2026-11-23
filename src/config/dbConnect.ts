@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 async function connectInDatabase(): Promise<typeof mongoose.connection>{
     
-    const dbURI = process.env.DB_CONNECTION_STRING;
+    const dbURI = process.env.MONGO_URL;
 
     if(!dbURI){
         throw new Error(
@@ -15,4 +15,4 @@ async function connectInDatabase(): Promise<typeof mongoose.connection>{
     return mongoose.connection;
 }
 
-export default connectInDatabase;
+export default connectInDatabase

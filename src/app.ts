@@ -12,31 +12,17 @@ const app = express();
 app.use(express.json());
 app.set("json spaces", 2);
 
+
+//ROTA DA DOCUMENTAÇÃO
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+
 
 //ROTA BASE - GET GERAL
 app.get("/", (req: Request, res: Response) =>{
     res.status(200).send("REVEST");
 });
 
-
-// GET - BUSCAR ROUPA PELO ID
-// app.get("/roupas/:id", (req: Request, res: Response) => {
-//     const id = Number(req.params.id);
-
-//     const roupa = roupas.find(roupa => roupa.id === id);
-
-//     if (!roupa) {
-//         return res.status(404).json({
-//             mensagem: "Roupa não encontrada"
-//         });
-//     }
-
-//     res.json(roupa)
-// })
-
 //REGISTRAR AS ROTAS DE 'ROUPAS' NA APLICAÇÃO
-
 app.use(roupaRouter);
 
 export default app;

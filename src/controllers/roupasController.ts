@@ -1,6 +1,6 @@
 import type {Request, Response} from "express";
 import Roupa, { type InterfaceRoupa } from "../models/Roupa.js"
-import { error } from "node:console";
+
 
 
 class RoupaController{
@@ -30,7 +30,7 @@ class RoupaController{
 
             res.status(200).json(roupaEncontrada);
         }catch (error){
-            res.status(500).json({mensagem: "Erro ao buscar livro por ID."})
+            res.status(500).json({mensagem: "Erro ao buscar roupa por ID."})
         }
     }
 
@@ -62,7 +62,7 @@ class RoupaController{
             }
 
             if(preco){
-                filtro.price = String(preco)
+                filtro.price = Number(preco)
             }
 
 

@@ -15,7 +15,7 @@ const router = Router();
 //CRIAÇÃO DE ROTAS DA ENTIDADE ROUPA
 
 //1° - ROTAS FIXAS E DE BUSCA
-router.get("/roupas/", RoupaController.listar);
+router.get("/roupas", RoupaController.listar);
 router.get("/roupas/busca", RoupaController.buscarPorFiltro);
 
 //2° - ROTAS DE BUSCA COM PARÃMETRO DINÂMICO
