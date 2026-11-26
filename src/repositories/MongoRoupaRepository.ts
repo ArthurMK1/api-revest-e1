@@ -41,7 +41,7 @@ export class MongoRoupaRepository implements IRoupaRepository {
             });
     }
 
-    async atualizar (id: String ){
+    async atualizaTodos (id: String, dados: RoupaDTO){
         return await Roupa.findByIdAndUpdate(
             id,
             {$set: dados},

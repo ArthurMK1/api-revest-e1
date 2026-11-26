@@ -1,15 +1,23 @@
 import type {Request, Response} from "express";
 import Roupa, { type InterfaceRoupa } from "../models/Roupa.js"
+import type { IRoupaRepository, RoupaDTO, FiltroRoupaDTO } from "../repositories/IRoupaRepository.js";
 
 
 
 class RoupaController{
-    
+
+    private roupaRepository: IRoupaRepository;
+
+    constructor(roupaRepository: IRoupaRepository){
+        this.roupaRepository = roupaRepository;
+    }
+
+
 // GET = listar todos as Roupas
 
-    static async listar (req: Request, res: Response){
+    async listar (req: Request, res: Response){
         try{
-            const listaRoupas = await Roupa.find({});
+            const listaRoupas = await this.roupaRepository.listar();
             res.status(200).json(listaRoupas);
         }catch (error){
             res.status(500).json({ mensagem: "Erro ao buscar roupa"})
@@ -18,10 +26,10 @@ class RoupaController{
 
 // GET - BUSCAR UMA ROUPA ESPECÍFICA PELO ID - REQ PARAMS
 
-    static async buscarPorId (req: Request<{ id: string }>, res: Response){
+    async buscarPorId (req: Request<{ id: string }>, res: Response){
         try{
             const { id } = req.params;
-            const roupaEncontrada = await Roupa.findById(id);
+            const roupaEncontrada = await this.roupaRepository.buscarPorId(id);
 
             if(!roupaEncontrada) {
                 res.status(404).json({mensagem: "Roupa não encontrada."});
@@ -36,7 +44,7 @@ class RoupaController{
 
 // GET - FILTRAR ROUPAS POR CRITÉRIOS OPCIONAIS
 
-    static async buscarPorFiltro (req: Request<{},{},InterfaceRoupa>, res: Response ) {
+    async buscarPorFiltro (req: Request<{},{},InterfaceRoupa>, res: Response ) {
         try{
             //Extrair os possíveis filtros enviados após o "?" na URL
             const { nome, categoria, cor, tamanho, preco } = req.query;
@@ -66,7 +74,7 @@ class RoupaController{
             }
 
 
-            const roupasFiltradas = await Roupa.find(filtro);
+            const roupasFiltradas = this.roupaRepository.buscarPorFiltro(filtro)
 
             res.status(200).json(roupasFiltradas)
 
@@ -77,18 +85,9 @@ class RoupaController{
 
 // POST = Cadastrar novas roupas
 
-    static async cadastrar (req: Request<{},{},InterfaceRoupa>, res: Response){
+    async cadastrar (req: Request<{},{},InterfaceRoupa>, res: Response){
         try{
-            const { name, category, color, size, price, cover} = req.body;
-            
-            const novaRoupa = await Roupa.create({
-                name,
-                category,
-                color,
-                size,
-                price: Number(price),
-                cover
-            });
+            const novaRoupa = await this.roupaRepository.cadastrar(req.body)
             
                 res.status(201).json({
                 mensagem: "Roupa cadastrada com sucesso!",
@@ -101,24 +100,11 @@ class RoupaController{
     
     // PUT = Atualizar dados de roupas
     
-    static async atualizaTodos (req: Request<{id: string}, {}, InterfaceRoupa>, res: Response){
+    async atualizaTodos (req: Request<{id: string}, {}, InterfaceRoupa>, res: Response){
         try{
             const {id} = req.params;
             
-            const { name, category, color, size, price, cover } = req.body;
-            
-            const roupaAtualizada = await Roupa.findByIdAndUpdate(
-                id,
-                {
-                    name,
-                    category,
-                    color,
-                    size,
-                    price: Number(price),
-                    cover
-                },
-                {new: true}
-            );
+            const roupaAtualizada = await this.roupaRepository.atualizaTodos(id, req.body)
             if (!roupaAtualizada) {
                 res.status(404).json({
                     mensagem: "Roupa não encontrada!"
@@ -136,16 +122,11 @@ class RoupaController{
     }
 
 // PATCH = Atualiza alguns dados
-static async atualizaParcial (req: Request<{id: string}, {}, InterfaceRoupa>, res: Response){
+async atualizaParcial (req: Request<{id: string}, {}, InterfaceRoupa>, res: Response){
     try{
             const { id } = req.params;
-    
-            const roupaAtualizada = await Roupa.findByIdAndUpdate(
-                    id,
-                    { $set: req.body },
-                    { returnDocument: 'after' }
-                    
-                )
+
+            const roupaAtualizada = await this.roupaRepository.atualizaParcial(id, req.body)
     
             if (!roupaAtualizada){
                 res.status(404).json({
@@ -165,11 +146,11 @@ static async atualizaParcial (req: Request<{id: string}, {}, InterfaceRoupa>, re
 }
 
 // DELETE = apaga uma roupa
-static async deletar (req: Request<{id: string}>, res: Response){
+async deletar (req: Request<{id: string}>, res: Response){
     try{
         const {id} = req.params;
-        
-        const roupaDeletada = await Roupa.findByIdAndDelete(id);
+
+        const roupaDeletada = await this.roupaRepository.deletar(id)
         
         if (!roupaDeletada){
             res.status(404).json({
