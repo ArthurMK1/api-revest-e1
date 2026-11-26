@@ -18,12 +18,12 @@ export interface FiltroRoupaDTO {
 }
 
 export interface IRoupaRepository{
-    listar(): Promise<any[]>;
-    buscarPorId(id: string): Promise<any[] | null>
-    buscarPorFiltro(filtros: FiltroRoupaDTO): Promise<any[]>; 
-    cadastrar(dados: RoupaDTO): Promise<any[]>;
-    atualizaTodos(id: string, dados: RoupaDTO): Promise<any[]>;
-    atualizaParcial(id: string, dados:Partial<RoupaDTO>): Promise<any[]>;
+    listar(): Promise<RoupaDTO[]>;
+    buscarPorId(id: string): Promise<RoupaDTO[] | null>
+    buscarPorFiltro(filtros: FiltroRoupaDTO): Promise<RoupaDTO[]>; 
+    cadastrar(dados: RoupaDTO): Promise<RoupaDTO>;
+    atualizaTodos(id: string, dados: RoupaDTO): Promise<RoupaDTO | null>;
+    atualizaParcial(id: string, dados:Partial<RoupaDTO>): Promise<RoupaDTO | null>;
     deletar(id: string): Promise<boolean>;
     
 }

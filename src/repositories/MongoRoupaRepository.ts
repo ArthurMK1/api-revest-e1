@@ -49,6 +49,14 @@ export class MongoRoupaRepository implements IRoupaRepository {
         );
     }
 
+    async atualizaParcial(id: string, dados: Partial<RoupaDTO>) {
+        return await Roupa.findByIdAndUpdate(
+            id,
+            {$set: dados},
+            {new: true},
+        )
+    }
+
     async deletar (id: string){
         const roupaDeletada = await Roupa.findByIdAndDelete(id);
         return Boolean(roupaDeletada)
