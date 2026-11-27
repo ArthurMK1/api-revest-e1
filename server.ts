@@ -1,6 +1,6 @@
 import "dotenv/config";
 import app from './src/app.js';
-import connectInDatabase from "./src/config/dbConnect.js";
+import connectInDatabase from "./src/config/dbConnectMongo.js";
 import mongoose from "mongoose";
 
 
